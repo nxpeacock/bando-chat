@@ -1,7 +1,7 @@
 if(Meteor.isServer){
     Meteor.methods({
-        getCurrentUser : function(){
-            return UserLocations.findOne({connectionId : this.connection.id})
+        getConnectionId : function(){
+            return this.connection.id;
         },
         updateUserConnection : function (c) {
             check(c.id, String);

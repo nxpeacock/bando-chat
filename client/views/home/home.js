@@ -1,5 +1,31 @@
 Template.home.onCreated(function () {
     currentLocation = new ReactiveVar({});
+    currentId = new ReactiveVar({});
+    AllUserLocations = new ReactiveVar([]);
+    mapView = new ReactiveVar({});
+    this.autorun(function () {
+        Meteor.call('getConnectionId', function (e, r) {
+            currentId.set(r);
+        });
+
+        if(FlowRouter.subsReady() && !_.isEmpty(mapView.get())){
+            if(currentId.get()){
+                var available = [],
+                    map = mapView.get();
+                var locations = UserLocations.find({connectionId : {$ne : currentId.get()}}).fetch();
+                _.each(locations,function(l){
+                    var marker = L.marker(l.latlng).addTo(map),
+                        circle = L.circle(l.latlng, 0).addTo(map);
+                    available.push({
+                        marker : marker,
+                        circle : circle
+                    });
+                });
+                mapView.set(map);
+                AllUserLocations.set(available);
+            }
+        }
+    })
 })
 
 Template.home.rendered = function () {
@@ -26,6 +52,8 @@ Template.home.rendered = function () {
         L.easyButton('fa-refresh', function (btn, map) {
             location.reload();
         }).addTo(map);
+
+        mapView.set(map)
     })
 }
 
