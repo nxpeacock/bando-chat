@@ -1,0 +1,20 @@
+# Meteor packages used by this project, one per line.
+# Check this file (and the other files in this directory) into your repository.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+meteor-platform
+bevanhunt:leaflet
+meteorhacks:flow-router
+meteorhacks:flow-layout
+meteorhacks:fast-render
+reactive-var
+fortawesome:fontawesome
+materialize:materialize
+aldeed:simple-schema
+aldeed:collection2
+ongoworks:security
+dburles:collection-helpers
+mdg:geolocation
+matb33:collection-hooks
