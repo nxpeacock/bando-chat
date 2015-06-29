@@ -5,7 +5,6 @@
 # but you can also edit it by hand.
 
 meteor-platform
-bevanhunt:leaflet
 meteorhacks:flow-router
 meteorhacks:flow-layout
 meteorhacks:fast-render
@@ -18,3 +17,5 @@ ongoworks:security
 dburles:collection-helpers
 mdg:geolocation
 matb33:collection-hooks
+bevanhunt:leaflet
+herrhelms:meteor-leaflet-locatecontrol

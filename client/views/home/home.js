@@ -3,7 +3,7 @@ Template.home.onCreated(function () {
     currentId = new ReactiveVar({});
     AllUserLocations = new ReactiveVar([]);
     mapView = new ReactiveVar({});
-    this.autorun(function () {
+/*    this.autorun(function () {
         Meteor.call('getConnectionId', function (e, r) {
             currentId.set(r);
         });
@@ -25,25 +25,31 @@ Template.home.onCreated(function () {
                 AllUserLocations.set(available);
             }
         }
-    })
+    })*/
 })
+
+
 
 Template.home.rendered = function () {
     $(document).ready(function () {
 
         L.Icon.Default.imagePath = '/packages/bevanhunt_leaflet/images';
-        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-        var osmCredit = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-        var osm = new L.TileLayer(osmUrl, {attribution: osmCredit});
+
+        var mapbox = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            maxZoom: 18,
+            id: 'nxcong.21ed4e86',
+            accessToken: 'pk.eyJ1Ijoibnhjb25nIiwiYSI6IjI3OGIxNDUzNzQ0OTc0YjQxMDlkMzBhMzhjOTk4ZWM1In0.KVVRoxtV4SaiKTxv2ygK5g'
+        });
 
         map = L.map('map', {zoomControl: false})
-            .addLayer(osm)
+            .addLayer(mapbox)
             .setView([21.034, 105.853], 10);
 
         new L.Control.Zoom({position: 'bottomright'}).addTo(map);
 
         L.easyButton('fa-compass', function (btn, map) {
-            map.locate({setView: true, maxZoom: 17});
+            map.locate({setView: true, maxZoom: map.getZoom()});
         }).addTo(map);
 
         map.on('locationfound', onLocationFound);
@@ -52,8 +58,10 @@ Template.home.rendered = function () {
         L.easyButton('fa-refresh', function (btn, map) {
             location.reload();
         }).addTo(map);
-
+        map.locate({setView: true, maxZoom: map.getZoom()});
         mapView.set(map)
+
+
     })
 }
 
@@ -73,10 +81,12 @@ function onLocationFound(e) {
         marker: marker,
         circle: circle
     });
+
     var params = {
-        latlng: [e.latlng.lat, e.latlng.lng]
+        latlng : _.values(e.latlng)
     };
-    Meteor.call('updateUserLocation', params);
+
+    Meteor.call('updateUserLocation',params);
 }
 
 function onLocationError(e) {

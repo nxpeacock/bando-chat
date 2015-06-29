@@ -6,7 +6,7 @@
 L.Control.EasyBar = L.Control.extend({
 
   options: {
-    position:       'bottomright',  // part of leaflet's defaults
+    position:       'topleft',  // part of leaflet's defaults
     id:             null,       // an id to tag the Bar with
     leafletClasses: true        // use leaflet classes?
   },
