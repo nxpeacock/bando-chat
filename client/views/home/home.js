@@ -14,33 +14,16 @@ Template.home.onCreated(function () {
             });
         }
     })
-
-    /*    this.autorun(function () {
-     Meteor.call('getConnectionId', function (e, r) {
-     currentId.set(r);
-     });
-
-     if(FlowRouter.subsReady() && !_.isEmpty(mapView.get())){
-     if(currentId.get()){
-     var available = [],
-     map = mapView.get();
-     var locations = UserLocations.find({connectionId : {$ne : currentId.get()}}).fetch();
-     _.each(locations,function(l){
-     var marker = L.marker(l.latlng).addTo(map),
-     circle = L.circle(l.latlng, 0).addTo(map);
-     available.push({
-     marker : marker,
-     circle : circle
-     });
-     });
-     mapView.set(map);
-     AllUserLocations.set(available);
-     }
-     }
-     })*/
 });
 
-
+UserLocations.find().observeChanges({
+    added : function(id, fields){
+        addMarkerUsers();
+    },
+    removed : function(id){
+        addMarkerUsers();
+    }
+})
 
 Template.home.rendered = function () {
     $(document).ready(function () {
@@ -70,53 +53,66 @@ Template.home.rendered = function () {
         map.on('locationfound', onLocationFound);
         map.on('locationerror', onLocationError);
         mapView.set(map);
-/*        if (FlowRouter.subsReady() && !_.isEmpty(mapView.get())) {
-            var users = UserLocations.find().fetch(),
-                available = [],
-                map = mapView.get()
-            _.each(users, function (l) {
-                var styleMarker = {
-                    radius: 8,
-                    fillColor: randomColor(),
-                    color: 'red',
-                    weight: 5,
-                    opacity: 1,
-                    stroke: true,
-                    fillOpacity: 0.8,
-                    className: 'marker_' + l.userId
-                };
-                var marker = L.circleMarker(l.latlng, styleMarker).addTo(map);
-                available.push({
-                    id: l.userId,
-                    marker: marker
-                });
-            });
-            AllUserLocations.set(available);
-            mapView.set(map);
-        }*/
+
+        Meteor.setTimeout(function(){
+            addMarkerUsers();
+        },2000)
+        /*        if (FlowRouter.subsReady() && !_.isEmpty(mapView.get())) {
+         var users = UserLocations.find().fetch(),
+         available = [],
+         map = mapView.get()
+         _.each(users, function (l) {
+         var styleMarker = {
+         radius: 8,
+         fillColor: randomColor(),
+         color: 'red',
+         weight: 5,
+         opacity: 1,
+         stroke: true,
+         fillOpacity: 0.8,
+         className: 'marker_' + l.userId
+         };
+         var marker = L.circleMarker(l.latlng, styleMarker).addTo(map);
+         available.push({
+         id: l.userId,
+         marker: marker
+         });
+         });
+         AllUserLocations.set(available);
+         mapView.set(map);
+         }*/
     });
-    this.autorun(function(){
-        if(FlowRouter.subsReady('getUsers') && !_.isEmpty(mapView.get())){
-            var users = UserLocations.find().fetch(),
-                available = [],
-                map = mapView.get();
-            _.each(users, function (l) {
-                var styleMarker = {
-                    fillColor: randomColor(),
-                    color: 'red'
-                };
-                var marker = L.marker(l.latlng).addTo(map),
-                    circle = L.circle(l.latlng, l.radius,styleMarker).addTo(map);
-                console.log(l.userId)
-                available.push({
-                    id: l.userId,
-                    marker: marker,
-                    circle : circle
-                });
+
+}
+
+
+
+function addMarkerUsers(){
+    if(FlowRouter.subsReady('getUsers') && !_.isEmpty(mapView.get())){
+        var users = UserLocations.find().fetch(),
+            available = AllUserLocations.get(),
+            map = mapView.get();
+        _.each(available,function(a){
+            map.removeLayer(a.marker);
+            map.removeLayer(a.circle);
+        });
+        available = [];
+        _.each(users, function (l) {
+            var styleMarker = {
+                fillColor: randomColor(),
+                color: 'red'
+            };
+            var marker = L.marker(l.latlng).addTo(map),
+                circle = L.circle(l.latlng, l.radius,styleMarker).addTo(map);
+            console.log(l.userId)
+            available.push({
+                id: l.userId,
+                marker: marker,
+                circle : circle
             });
-            AllUserLocations.set(available);
-        }
-    })
+        });
+        AllUserLocations.set(available);
+    }
 }
 
 function onLocationFound(e) {

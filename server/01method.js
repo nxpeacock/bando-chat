@@ -56,6 +56,9 @@ if(Meteor.isServer){
         removeUserLocation : function(userId){
             var userId = userId || this.userId;
             UserLocations.remove({userId : userId});
+        },
+        getUserLocations : function(){
+            return UserLocations.find({userId : {$ne : this.userId}}).fetch();
         }
     })
 }
