@@ -102,7 +102,8 @@ function addMarkerUsers(){
                 fillColor: randomColor(),
                 color: 'red'
             };
-            var marker = L.marker(l.latlng).addTo(map),
+            var icon = new genderIcon({iconUrl: l.markerIcon});
+            var marker = L.marker(l.latlng,{icon : icon}).addTo(map),
                 circle = L.circle(l.latlng, l.radius,styleMarker).addTo(map);
             console.log(l.userId)
             available.push({
