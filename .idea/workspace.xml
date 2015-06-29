@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5dd6853a-3ffb-4a1b-a152-692faace958f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/views/home/home.js" afterPath="$PROJECT_DIR$/client/views/home/home.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/lib/gendericon.js" afterPath="$PROJECT_DIR$/client/lib/gendericon.js" />
     </list>
     <ignored path="mapchat.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -84,11 +83,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="home.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="home.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/views/home/home.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.30591258">
-              <caret line="105" column="143" selection-start-line="105" selection-start-column="143" selection-end-line="105" selection-end-column="143" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="111" column="22" selection-start-line="111" selection-start-column="22" selection-end-line="111" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gendericon.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/client/lib/gendericon.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.077120826">
+              <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -128,8 +137,8 @@
         <option value="$PROJECT_DIR$/server/00startup.js" />
         <option value="$PROJECT_DIR$/lib/schemas.js" />
         <option value="$PROJECT_DIR$/server/01method.js" />
-        <option value="$PROJECT_DIR$/client/lib/gendericon.js" />
         <option value="$PROJECT_DIR$/client/views/home/home.js" />
+        <option value="$PROJECT_DIR$/client/lib/gendericon.js" />
       </list>
     </option>
   </component>
@@ -696,14 +705,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/lib/gendericon.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.11568123">
-          <caret line="3" column="94" selection-start-line="3" selection-start-column="94" selection-end-line="3" selection-end-column="94" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/01method.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -722,8 +723,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/views/home/home.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30591258">
-          <caret line="105" column="143" selection-start-line="105" selection-start-column="143" selection-end-line="105" selection-end-column="143" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="111" column="22" selection-start-line="111" selection-start-column="22" selection-end-line="111" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/lib/gendericon.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.077120826">
+          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
           <folding />
         </state>
       </provider>
