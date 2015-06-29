@@ -5,9 +5,13 @@ Template.home.onCreated(function () {
     mapView = new ReactiveVar({});
 
     this.autorun(function(c){
-        Meteor.call('getConnectionId', function (e, r) {
-            currentId.set(r);
-        });
+        if(!Meteor.userId()){
+            Meteor.call('createGuestUser',function(e,r){
+                Meteor.loginWithPassword(r.username, r.token,function(err){
+                    c.stop();
+                });
+            });
+        }
     })
 
 /*    this.autorun(function () {
@@ -34,8 +38,6 @@ Template.home.onCreated(function () {
         }
     })*/
 })
-
-
 
 Template.home.rendered = function () {
     $(document).ready(function () {
@@ -83,11 +85,11 @@ Template.home.rendered = function () {
                    opacity: 1,
                    stroke : true,
                    fillOpacity: 0.8,
-                   className : 'marker_' + l.connectionId
+                   className : 'marker_' + l.userId
                };
                var marker = L.circleMarker(l.latlng,styleMarker).addTo(map);
                available.push({
-                   id : l._id,
+                   id : l.userId,
                    marker : marker
                });
            });
@@ -114,8 +116,9 @@ function onLocationFound(e) {
     });
 
     var params = {
-        latlng : _.values(e.latlng)
-    };
+        latlng : _.values(e.latlng),
+        radius : radius
+    }
 
     Meteor.call('updateUserLocation',params);
 }
