@@ -11,5 +11,7 @@ if(Meteor.isServer){
         Meteor.call('updateUserLocation',id, data);
     });
 
-
+    UserStatus.events.on("connectionLogout", function(fields) {
+        Meteor.call('removeUserLocation',fields.userId);
+    })
 }

@@ -1,47 +1,50 @@
 Template.home.onCreated(function () {
     currentLocation = new ReactiveVar({});
-    currentId = new ReactiveVar({});
+    userLocations = new ReactiveVar({});
     AllUserLocations = new ReactiveVar([]);
+
     mapView = new ReactiveVar({});
 
-    this.autorun(function(c){
-        if(!Meteor.userId()){
-            Meteor.call('createGuestUser',function(e,r){
-                Meteor.loginWithPassword(r.username, r.token,function(err){
+    this.autorun(function (c) {
+        if (!Meteor.userId()) {
+            Meteor.call('createGuestUser', function (e, r) {
+                Meteor.loginWithPassword(r.username, r.token, function (err) {
                     c.stop();
                 });
             });
         }
     })
 
-/*    this.autorun(function () {
-        Meteor.call('getConnectionId', function (e, r) {
-            currentId.set(r);
-        });
+    /*    this.autorun(function () {
+     Meteor.call('getConnectionId', function (e, r) {
+     currentId.set(r);
+     });
 
-        if(FlowRouter.subsReady() && !_.isEmpty(mapView.get())){
-            if(currentId.get()){
-                var available = [],
-                    map = mapView.get();
-                var locations = UserLocations.find({connectionId : {$ne : currentId.get()}}).fetch();
-                _.each(locations,function(l){
-                    var marker = L.marker(l.latlng).addTo(map),
-                        circle = L.circle(l.latlng, 0).addTo(map);
-                    available.push({
-                        marker : marker,
-                        circle : circle
-                    });
-                });
-                mapView.set(map);
-                AllUserLocations.set(available);
-            }
-        }
-    })*/
-})
+     if(FlowRouter.subsReady() && !_.isEmpty(mapView.get())){
+     if(currentId.get()){
+     var available = [],
+     map = mapView.get();
+     var locations = UserLocations.find({connectionId : {$ne : currentId.get()}}).fetch();
+     _.each(locations,function(l){
+     var marker = L.marker(l.latlng).addTo(map),
+     circle = L.circle(l.latlng, 0).addTo(map);
+     available.push({
+     marker : marker,
+     circle : circle
+     });
+     });
+     mapView.set(map);
+     AllUserLocations.set(available);
+     }
+     }
+     })*/
+});
+
+
 
 Template.home.rendered = function () {
     $(document).ready(function () {
-
+        map = L.map('map', {zoomControl: false});
         L.Icon.Default.imagePath = '/packages/bevanhunt_leaflet/images';
 
         var mapbox = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -49,11 +52,10 @@ Template.home.rendered = function () {
             maxZoom: 18,
             id: 'nxcong.21ed4e86',
             accessToken: 'pk.eyJ1Ijoibnhjb25nIiwiYSI6IjI3OGIxNDUzNzQ0OTc0YjQxMDlkMzBhMzhjOTk4ZWM1In0.KVVRoxtV4SaiKTxv2ygK5g'
-        });
+        }).addTo(map);
 
-        map = L.map('map', {zoomControl: false})
-            .addLayer(mapbox)
-            .setView([21.034, 105.853], 10);
+        map.setView([21.034, 105.853], 10);
+        map.locate({setView: true, maxZoom: map.getZoom()});
 
         new L.Control.Zoom({position: 'bottomright'}).addTo(map);
 
@@ -61,40 +63,59 @@ Template.home.rendered = function () {
             map.locate({setView: true, maxZoom: map.getZoom()});
         }).addTo(map);
 
-        map.on('locationfound', onLocationFound);
-        map.on('locationerror', onLocationError);
-
         L.easyButton('fa-refresh', function (btn, map) {
             location.reload();
         }).addTo(map);
 
-        map.locate({setView: true, maxZoom: map.getZoom()});
-
-        mapView.set(map)
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
+        mapView.set(map);
+/*        if (FlowRouter.subsReady() && !_.isEmpty(mapView.get())) {
+            var users = UserLocations.find().fetch(),
+                available = [],
+                map = mapView.get()
+            _.each(users, function (l) {
+                var styleMarker = {
+                    radius: 8,
+                    fillColor: randomColor(),
+                    color: 'red',
+                    weight: 5,
+                    opacity: 1,
+                    stroke: true,
+                    fillOpacity: 0.8,
+                    className: 'marker_' + l.userId
+                };
+                var marker = L.circleMarker(l.latlng, styleMarker).addTo(map);
+                available.push({
+                    id: l.userId,
+                    marker: marker
+                });
+            });
+            AllUserLocations.set(available);
+            mapView.set(map);
+        }*/
     });
-    this.autorun(function(c){
-       if(FlowRouter.subsReady() && map){
-           var users = UserLocations.find().fetch(),
-               available = [];
-           _.each(users,function(l){
-               var styleMarker = {
-                   radius: 8,
-                   fillColor: randomColor(),
-                   color: 'red',
-                   weight: 5,
-                   opacity: 1,
-                   stroke : true,
-                   fillOpacity: 0.8,
-                   className : 'marker_' + l.userId
-               };
-               var marker = L.circleMarker(l.latlng,styleMarker).addTo(map);
-               available.push({
-                   id : l.userId,
-                   marker : marker
-               });
-           });
-           AllUserLocations.set(available);
-       }
+    this.autorun(function(){
+        if(FlowRouter.subsReady('getUsers') && !_.isEmpty(mapView.get())){
+            var users = UserLocations.find().fetch(),
+                available = [],
+                map = mapView.get();
+            _.each(users, function (l) {
+                var styleMarker = {
+                    fillColor: randomColor(),
+                    color: 'red'
+                };
+                var marker = L.marker(l.latlng).addTo(map),
+                    circle = L.circle(l.latlng, l.radius,styleMarker).addTo(map);
+                console.log(l.userId)
+                available.push({
+                    id: l.userId,
+                    marker: marker,
+                    circle : circle
+                });
+            });
+            AllUserLocations.set(available);
+        }
     })
 }
 
@@ -116,11 +137,11 @@ function onLocationFound(e) {
     });
 
     var params = {
-        latlng : _.values(e.latlng),
-        radius : radius
+        latlng: _.values(e.latlng),
+        radius: radius
     }
 
-    Meteor.call('updateUserLocation',params);
+    Meteor.call('updateUserLocation', params);
 }
 
 function onLocationError(e) {

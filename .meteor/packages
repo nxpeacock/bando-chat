@@ -15,7 +15,6 @@ aldeed:simple-schema
 aldeed:collection2
 ongoworks:security
 dburles:collection-helpers
-mdg:geolocation
 matb33:collection-hooks
 bevanhunt:leaflet
 rzymek:randomcolor
@@ -25,3 +24,4 @@ accounts-base
 accounts-password
 alanning:roles
 anti:fake
+mizzao:user-status
