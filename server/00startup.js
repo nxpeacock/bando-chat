@@ -6,10 +6,9 @@ if(Meteor.isServer){
         })
     });
 
-    Streamy.on('update_Location',function(data, from){
-        var id = Streamy.id(from);
-        Meteor.call('updateUserLocation',id, data);
-    });
+    Streamy.BroadCasts.allow = function(data, from) {
+        return true;
+    };
 
     UserStatus.events.on("connectionLogout", function(fields) {
         Meteor.call('removeUserLocation',fields.userId);
