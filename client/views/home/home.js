@@ -16,6 +16,8 @@ Template.home.onCreated(function () {
     })
 });
 
+Messages = new Mongo.Collection(null);
+
 UserLocations.find().observeChanges({
     added : function(id, fields){
         addMarkerUsers();
@@ -57,30 +59,6 @@ Template.home.rendered = function () {
         Meteor.setTimeout(function(){
             addMarkerUsers();
         },2000)
-        /*        if (FlowRouter.subsReady() && !_.isEmpty(mapView.get())) {
-         var users = UserLocations.find().fetch(),
-         available = [],
-         map = mapView.get()
-         _.each(users, function (l) {
-         var styleMarker = {
-         radius: 8,
-         fillColor: randomColor(),
-         color: 'red',
-         weight: 5,
-         opacity: 1,
-         stroke: true,
-         fillOpacity: 0.8,
-         className: 'marker_' + l.userId
-         };
-         var marker = L.circleMarker(l.latlng, styleMarker).addTo(map);
-         available.push({
-         id: l.userId,
-         marker: marker
-         });
-         });
-         AllUserLocations.set(available);
-         mapView.set(map);
-         }*/
     });
 
 }
@@ -124,7 +102,8 @@ function onLocationFound(e) {
         map.removeLayer(current.marker);
         map.removeLayer(current.circle);
     }
-    var marker = L.marker(e.latlng).addTo(map).bindPopup("Bạn đang trong bán kính " + radius + " mét tại điểm này.").openPopup(),
+    var icon = new genderIcon({iconUrl: 'icons/me.png'});
+    var marker = L.marker(e.latlng,{icon : icon}).addTo(map).bindPopup("Bạn đang trong bán kính " + radius + " mét tại điểm này.").openPopup(),
         circle = L.circle(e.latlng, radius).addTo(map);
 
 
