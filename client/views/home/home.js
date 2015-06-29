@@ -3,6 +3,13 @@ Template.home.onCreated(function () {
     currentId = new ReactiveVar({});
     AllUserLocations = new ReactiveVar([]);
     mapView = new ReactiveVar({});
+
+    this.autorun(function(c){
+        Meteor.call('getConnectionId', function (e, r) {
+            currentId.set(r);
+        });
+    })
+
 /*    this.autorun(function () {
         Meteor.call('getConnectionId', function (e, r) {
             currentId.set(r);
@@ -58,10 +65,33 @@ Template.home.rendered = function () {
         L.easyButton('fa-refresh', function (btn, map) {
             location.reload();
         }).addTo(map);
+
         map.locate({setView: true, maxZoom: map.getZoom()});
+
         mapView.set(map)
-
-
+    });
+    this.autorun(function(c){
+       if(FlowRouter.subsReady() && map){
+           var users = UserLocations.find().fetch(),
+               available = [];
+           _.each(users,function(l){
+               var styleMarker = {
+                   radius: 8,
+                   fillColor: randomColor(),
+                   color: 'red',
+                   weight: 5,
+                   opacity: 1,
+                   stroke : true,
+                   fillOpacity: 0.8,
+                   className : 'marker_' + l.connectionId
+               };
+               var marker = L.circleMarker(l.latlng,styleMarker).addTo(map);
+               available.push({
+                   marker : marker
+               });
+           });
+           AllUserLocations.set(available);
+       }
     })
 }
 

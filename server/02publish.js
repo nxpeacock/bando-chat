@@ -1,6 +1,7 @@
 if(Meteor.isServer){
     Meteor.publish('getUsers',function(){
-        return UserLocations.find();
+        var currentId = this.connection.id;
+        return UserLocations.find({connectionId : {$ne : currentId}});
     });
 
     Meteor.publish('getOnlyMe',function(){
