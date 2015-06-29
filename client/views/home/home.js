@@ -63,6 +63,20 @@ Template.home.rendered = function () {
 
 }
 
+Template.home.events({
+    'keyup #txtMessage' : function(e,t){
+        e.preventDefault();
+        if(e.keyCode == 13){
+            var msg = $('#txtMessage').val();
+            if(!_.isEmpty(msg)){
+                var marker = currentLocation.get().marker;
+                marker.bindPopup(msg).openPopup();
+                $('#txtMessage').val('');
+            }
+        }
+    }
+})
+
 
 
 function addMarkerUsers(){
