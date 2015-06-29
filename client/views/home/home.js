@@ -87,6 +87,7 @@ Template.home.rendered = function () {
                };
                var marker = L.circleMarker(l.latlng,styleMarker).addTo(map);
                available.push({
+                   id : l._id,
                    marker : marker
                });
            });
