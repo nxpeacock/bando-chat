@@ -5,24 +5,14 @@ Template.home.onCreated(function () {
     popupTimeoutId = new ReactiveVar();
     sharePopupTimeoutId = new ReactiveVar();
     mapView = new ReactiveVar({});
-
-    this.autorun(function (c) {
-        if (!Meteor.userId()) {
-            Meteor.call('createGuestUser', function (e, r) {
-                Meteor.loginWithPassword(r.username, r.token, function (err) {
-                    c.stop();
-                });
-            });
-        }
-    })
 });
 
 var genderIcon = function(iconUrl){
     return L.icon({
         iconUrl : iconUrl,
-        popupAnchor:  [-2, -22],
-        iconSize:     [48, 48], // size of the icon
-        iconAnchor:   [24, 24] // point of the icon which will correspond to marker's location
+        popupAnchor:  [-2, -8],
+        iconSize:     [32, 32], // size of the icon
+        iconAnchor:   [16, 16] // point of the icon which will correspond to marker's location
     });
 }
 
@@ -36,6 +26,7 @@ UserLocations.find().observeChanges({
 })
 
 Template.home.rendered = function () {
+    document.title = 'BẢN ĐỒ Chat';
     $(document).ready(function () {
         map = L.map('map', {zoomControl: false});
         L.Icon.Default.imagePath = '/packages/bevanhunt_leaflet/images';
@@ -108,7 +99,7 @@ Template.home.events({
 function addMarkerUsers(){
     try{
         if(FlowRouter.subsReady('getUsers') && !_.isEmpty(mapView.get())){
-            var users = UserLocations.find().fetch(),
+            var users = UserLocations.find({userId : {$ne : Meteor.userId()}}).fetch(),
                 available = AllUserLocations.get(),
                 map = mapView.get();
             _.each(available,function(a){

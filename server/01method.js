@@ -10,7 +10,9 @@ if(Meteor.isServer){
                     fullName: guest.fullname,
                     token: c.id,
                     ipAddress : c.clientAddress,
-                    gender: _.random(0, 1)
+                    gender: _.random(0, 1),
+                    isFirstTime : true,
+                    isShareAccurateLocation : true
                 }
             });
             var guestId = Accounts.createUser({

@@ -1,6 +1,6 @@
 if(Meteor.isServer){
     Meteor.publish('getUsers',function(){
-        return UserLocations.find({userId : {$ne : this.userId}});
+        return UserLocations.find();
     });
 
     Meteor.publish('getOnlyMe',function(){
