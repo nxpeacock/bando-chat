@@ -95,7 +95,7 @@ Template.home.events({
                     popup = marker.bindPopup(msg);
                 popup.openPopup();
                 $('#txtMessage').val('');
-                Streamy.broadcast('sendMsg',{id : Meteor.userId(),msg : msg});
+                chatStream.emit('chat', {id : Meteor.userId(), msg : msg});
                 if(popupTimeoutId.get()) Meteor.clearTimeout(popupTimeoutId.get());
                 popupTimeoutId.set(Meteor.setTimeout(function(){popup.closePopup()},10000));
             }
@@ -173,14 +173,16 @@ function onLocationError(e) {
     alert(e.message);
 }
 
-Streamy.on('sendMsg',function(params){
+chatStream = new Meteor.Stream('chat');
+
+chatStream.on('chat', function(params) {
     if(params.id == Meteor.userId()) return;
     var locations = AllUserLocations.get();
     if(_.size(locations) <= 0) return;
-    var l = _.findWhere(locations,params.id);
-    if(undefined === typeof l) return;
+    var l = _.findWhere(locations,{id : params.id});
+    if(l === undefined) return;
     var popup = l.marker.bindPopup(params.msg);
     popup.openPopup();
     if(sharePopupTimeoutId.get()) Meteor.clearTimeout(sharePopupTimeoutId.get());
     sharePopupTimeoutId.set(Meteor.setTimeout(function(){popup.closePopup()},10000));
-})
+});

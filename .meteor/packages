@@ -18,11 +18,9 @@ dburles:collection-helpers
 matb33:collection-hooks
 bevanhunt:leaflet
 rzymek:randomcolor
-yuukan:streamy
-yuukan:streamy-rooms
 accounts-base
 accounts-password
 alanning:roles
 anti:fake
 mizzao:user-status
-djedi:sanitize-html
+lepozepo:streams
