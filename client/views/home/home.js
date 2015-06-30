@@ -20,9 +20,9 @@ Template.home.onCreated(function () {
 var genderIcon = function(iconUrl){
     return L.icon({
         iconUrl : iconUrl,
-        popupAnchor:  [-2, -46],
-        iconSize:     [32, 48], // size of the icon
-        iconAnchor:   [17, 47] // point of the icon which will correspond to marker's location
+        popupAnchor:  [-2, -22],
+        iconSize:     [48, 48], // size of the icon
+        iconAnchor:   [24, 24] // point of the icon which will correspond to marker's location
     });
 }
 
@@ -146,7 +146,7 @@ function onLocationFound(e) {
         map.removeLayer(current.marker);
         map.removeLayer(current.circle);
     }
-    var icon = genderIcon('icons/me.png');
+    var icon = genderIcon('icons/me1.png');
     var marker = L.marker(e.latlng,{icon : icon}).addTo(map),
         circle = L.circle(e.latlng, radius).addTo(map);
 
