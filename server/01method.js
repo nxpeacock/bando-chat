@@ -44,7 +44,7 @@ if(Meteor.isServer){
                     }
                 });
 
-                var icon = (user.profile.gender == 0) ? 'icons/female1.png' : 'icons/male1.png';
+                var icon = (user.profile.gender == 0) ? 'icons/female2.png' : 'icons/male2.png';
                 UserLocations.upsert({userId : user._id},{
                     $set : {
                         userId : user._id,
