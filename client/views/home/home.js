@@ -19,9 +19,13 @@ var genderIcon = function(iconUrl){
 UserLocations.find().observeChanges({
     added : function(id, fields){
         addMarkerUsers();
+        var msg = 'Vừa có ai đó tham gia vào BANDO Chat.';
+        sendNotification(msg);
     },
     removed : function(id){
         addMarkerUsers();
+        var msg = 'Vừa có ai đó thoát khỏi BANDO Chat.';
+        sendNotification(msg);
     }
 })
 
@@ -87,6 +91,9 @@ Template.home.events({
                 popup.openPopup();
                 $('#txtMessage').val('');
                 chatStream.emit('chat', {id : Meteor.userId(), msg : msg});
+                /*var notificationMsg = _.template('<%=username%> nói : <%=msg%>'),
+                    username = Meteor.user().username;
+                Notification(notificationMsg({username : username, msg : msg}));*/
                 if(popupTimeoutId.get()) Meteor.clearTimeout(popupTimeoutId.get());
                 popupTimeoutId.set(Meteor.setTimeout(function(){popup.closePopup()},10000));
             }
@@ -177,3 +184,22 @@ chatStream.on('chat', function(params) {
     if(sharePopupTimeoutId.get()) Meteor.clearTimeout(sharePopupTimeoutId.get());
     sharePopupTimeoutId.set(Meteor.setTimeout(function(){popup.closePopup()},10000));
 });
+
+function sendNotification(msg){
+    try{
+        if(Session.get('isNotification')){
+            console.log('send : ',msg);
+            new Notification('BANDO Chat thông báo', {
+                icon: 'icons/notification.png',
+                body: msg
+            });
+        }
+    }catch(ex){
+        console.log('Exception : ', ex)
+    }
+}
+
+chatStream.on('Notification',function(msg){
+    console.log('on : ',msg);
+
+})

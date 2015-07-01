@@ -11,7 +11,7 @@ if(Meteor.isServer){
             return parser.text('every 2 hours');
         },
         job: function() {
-            return removeOfflineUsers();
+            return Meteor.call('removeOfflineUsers');
         }
     });
 
