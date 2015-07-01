@@ -35,12 +35,10 @@ Template.home.rendered = function () {
         map = L.map('map', {zoomControl: false});
         L.Icon.Default.imagePath = '/packages/bevanhunt_leaflet/images';
 
-        var mapbox = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            maxZoom: 18,
-            id: 'nxcong.21ed4e86',
-            accessToken: 'pk.eyJ1Ijoibnhjb25nIiwiYSI6IjI3OGIxNDUzNzQ0OTc0YjQxMDlkMzBhMzhjOTk4ZWM1In0.KVVRoxtV4SaiKTxv2ygK5g'
-        }).addTo(map);
+        // create the tile layer with correct attribution
+        var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+        var osm = new L.TileLayer(osmUrl, {maxZoom: 18, attribution: osmAttrib}).addTo(map);
 
         map.setView([21.034, 105.853], 10);
         map.locate({setView: true, maxZoom: map.getZoom(),enableHighAccuracy : true});
@@ -53,6 +51,10 @@ Template.home.rendered = function () {
 
         L.easyButton('fa-refresh', function (btn, map) {
             location.reload();
+        }).addTo(map);
+
+        L.easyButton('fa-github', function (btn, map) {
+            window.open('https://github.com/nxpeacock/bando-chat','_blank');
         }).addTo(map);
 
         map.on('locationfound', onLocationFound);
