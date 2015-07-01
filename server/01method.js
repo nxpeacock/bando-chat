@@ -63,6 +63,12 @@ if(Meteor.isServer){
         },
         getUserLocations : function(){
             return UserLocations.find({userId : {$ne : this.userId}}).fetch();
+        },
+        removeOfflineUsers : function(){
+            var usersOffline = Meteor.users.find({'status.online':false},{fields:{_id : 1}}).fetch();
+            var ids = _.pluck(usersOffline,'_id');
+            if(_.size(ids) <= 0) return 0;
+            return UserLocations.remove({userId : {$in : ids}});
         }
     })
 }

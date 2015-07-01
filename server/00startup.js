@@ -1,14 +1,19 @@
 if(Meteor.isServer){
     Meteor.UserClient = {}
     Meteor.startup(function(){
-        Meteor.onConnection(function(c){
-            Meteor.UserClient = c;
-        })
+        SyncedCron.start();
     });
-/*
-    Streamy.BroadCasts.allow = function(data, from) {
-        return true;
-    };*/
+
+    SyncedCron.add({
+        name: 'Remove offline users',
+        schedule: function(parser) {
+            // parser is a later.parse object
+            return parser.text('every 2 hours');
+        },
+        job: function() {
+            return removeOfflineUsers();
+        }
+    });
 
     chatStream = new Meteor.Stream('chat');
 
